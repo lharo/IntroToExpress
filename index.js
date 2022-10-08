@@ -27,9 +27,6 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-// CRUD
-// CREATE READ UPDATE DELETE
-
 // CREATE
 //Create movie
 app.post('/create', async (req, res) => {
@@ -41,8 +38,23 @@ app.post('/create', async (req, res) => {
     const id = segments[1];
     res.send({
       status: 200,
-      id,
-      message: "All cool"
+      id
+    });
+  } catch (error) {
+    res.send(error);
+  }
+})
+
+// GET
+//GET movie
+app.get('/get-movie/{:id}', async (req, res) => {
+  try {
+    const moviesDb = db.collection('movies');
+    // const resp = moviesDb.doc({id}).set(movie);
+    const movie = await moviesDb.get(id);
+    res.send({
+      status: 200,
+      movie
     });
   } catch (error) {
     res.send(error);
