@@ -2,16 +2,7 @@
 const express = require('express');
 const bodyParser =  require('body-parser');
 const cors = require('cors');
-var firebase = require("firebase-admin");
-
-var serviceAccount = require("./key.json");
-
-firebase.initializeApp({
-  credential: firebase.credential.cert(serviceAccount)
-});
-
-// Create db and a collection within it
-const db = firebase.firestore();
+const movieRouter = require('./routes')
 
 //Creating express app
 const app = express();
@@ -21,33 +12,7 @@ const apiPort = 3003;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 app.use(bodyParser.json());
-
-//Creating endpoint
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
-
-// CRUD
-// CREATE READ UPDATE DELETE
-
-// CREATE
-//Create movie
-app.post('/create', async (req, res) => {
-  try {
-    const { body: movie } = req;
-    const moviesDb = db.collection('movies');
-    // const resp = moviesDb.doc({id}).set(movie);
-    const { _path: { segments } } = await moviesDb.add(movie);
-    const id = segments[1];
-    res.send({
-      status: 200,
-      id,
-      message: "All cool"
-    });
-  } catch (error) {
-    res.send(error);
-  }
-})
+app.use('/api', movieRouter)
 
 //Tell app to listen for new calls and sleep when none are arriving
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
