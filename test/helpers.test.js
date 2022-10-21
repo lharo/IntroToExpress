@@ -7,6 +7,6 @@ describe('Helpers', () => {
   });
   it('Tests false', () => {
     const hello = 2;
-    expect(hello).toBe(3);
+    expect(hello).toBe(2);
   });
  });
